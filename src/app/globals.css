@@ -1,0 +1,136 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+/* ── DARK THEME (default) ───────────────────────────────── */
+:root,
+[data-theme="dark"] {
+  --page:      #040810;
+  --surface:   #071222;
+  --raised:    #0a1828;
+  --dim:       #162840;
+  --bright:    #1e4060;
+  --accent:    #00c8ff;
+  --accent-on: #040810;
+  --accent-glow: rgba(0, 200, 255, 0.2);
+  --hi:  #e8f4ff;
+  --mid: #5a8ab0;
+  --lo:  #2a5070;
+
+  --canvas-r: 0;
+  --canvas-g: 200;
+  --canvas-b: 255;
+
+  --grid-line: rgba(0, 200, 255, 0.04);
+  --scanline-opacity: 0.03;
+  color-scheme: dark;
+}
+
+/* ── LIGHT THEME ────────────────────────────────────────── */
+[data-theme="light"] {
+  --page:      #f0f4f8;
+  --surface:   #ffffff;
+  --raised:    #e8edf5;
+  --dim:       #d0dce8;
+  --bright:    #a8bfd4;
+  --accent:    #005fa3;
+  --accent-on: #ffffff;
+  --accent-glow: rgba(0, 95, 163, 0.15);
+  --hi:  #0d1e32;
+  --mid: #3a607a;
+  --lo:  #7a9aae;
+
+  --canvas-r: 0;
+  --canvas-g: 80;
+  --canvas-b: 150;
+
+  --grid-line: rgba(0, 80, 150, 0.06);
+  --scanline-opacity: 0;
+  color-scheme: light;
+}
+
+/* ── BASE ───────────────────────────────────────────────── */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--page);
+  color: var(--hi);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+/* Technical grid background */
+.bg-grid {
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* Scanline overlay — only visible in dark mode */
+.scanline {
+  pointer-events: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 9999;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, var(--scanline-opacity)) 2px,
+    rgba(0, 0, 0, var(--scanline-opacity)) 4px
+  );
+}
+
+/* Technical monospace label */
+.label-tech {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--page); }
+::-webkit-scrollbar-thumb { background: var(--dim); border-radius: 0; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+/* Blinking cursor */
+.cursor-blink::after {
+  content: '_';
+  animation: blink 1.2s step-end infinite;
+  color: var(--accent);
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+@keyframes flicker {
+  0%, 94%, 95%, 97%, 100% { opacity: 1; }
+  94.5%, 96%              { opacity: 0.85; }
+}
+
+/* Theme transition for all interactive elements */
+*, *::before, *::after {
+  transition-property: background-color, border-color, color, fill, stroke;
+  transition-timing-function: ease;
+  transition-duration: 0.2s;
+}
+
+/* But NOT for transforms, opacity animations that should be instant */
+.no-theme-transition {
+  transition: none !important;
+}
